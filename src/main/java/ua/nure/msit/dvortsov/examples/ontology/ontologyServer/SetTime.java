@@ -1,17 +1,17 @@
 package ua.nure.msit.dvortsov.examples.ontology.ontologyServer;
 
-import java.util.Date;
-
 import jade.content.AgentAction;
 
-public class SetTime implements AgentAction{
-	private Date time;
+import java.util.Date;
 
-	public Date getTime() {
-		return time;
-	}
+public class SetTime implements AgentAction {
+    private Date time;
 
-	public void setTime(Date time) {
-		this.time = time;
-	}
+    public Date getTime() {
+        return time;
+    }
+
+    public void setTime(Date time) {
+        this.time = time;
+    }
 }

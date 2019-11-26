@@ -1,26 +1,26 @@
 /***************************************************************
-JADE - Java Agent DEvelopment Framework is a framework to develop
-multi-agent systems in compliance with the FIPA specifications.
-Jade is Copyright (C) 2000 CSELT S.p.A.
-This file copyright (c) 2001 Hewlett-Packard Corp.
+ JADE - Java Agent DEvelopment Framework is a framework to develop
+ multi-agent systems in compliance with the FIPA specifications.
+ Jade is Copyright (C) 2000 CSELT S.p.A.
+ This file copyright (c) 2001 Hewlett-Packard Corp.
 
-GNU Lesser General Public License
+ GNU Lesser General Public License
 
-This library is free software; you can redistribute it and/or
-modify it under the terms of the GNU Lesser General Public
-License as published by the Free Software Foundation,
-version 2.1 of the License.
+ This library is free software; you can redistribute it and/or
+ modify it under the terms of the GNU Lesser General Public
+ License as published by the Free Software Foundation,
+ version 2.1 of the License.
 
-This library is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-Lesser General Public License for more details.
+ This library is distributed in the hope that it will be useful,
+ but WITHOUT ANY WARRANTY; without even the implied warranty of
+ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+ Lesser General Public License for more details.
 
-You should have received a copy of the GNU Lesser General Public
-License along with this library; if not, write to the
-Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-Boston, MA  02111-1307, USA.
-*****************************************************************/
+ You should have received a copy of the GNU Lesser General Public
+ License along with this library; if not, write to the
+ Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+ Boston, MA  02111-1307, USA.
+ *****************************************************************/
 
 /*****************************************************************************
  * Source code information
@@ -40,20 +40,30 @@ Boston, MA  02111-1307, USA.
  *****************************************************************************/
 
 // Package
-///////////////
-package ua.nure.msit.dvortsov.examples.party;
-
+///////////////package ua.nure.msit.dvortsov.examples.party;
 
 // Imports
 ///////////////
-import java.awt.*;
-import javax.swing.*;
-import java.beans.*;
-import javax.swing.event.*;
-import java.awt.event.*;
 
 import jade.core.behaviours.OneShotBehaviour;
 
+import javax.swing.BorderFactory;
+import javax.swing.Box;
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JProgressBar;
+import javax.swing.JSlider;
+import javax.swing.SwingConstants;
+import javax.swing.event.ChangeEvent;
+import java.awt.BorderLayout;
+import java.awt.Color;
+import java.awt.Component;
+import java.awt.Dimension;
+import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowEvent;
 
 /**
  * The Swing GUI for the party host.
@@ -62,15 +72,12 @@ import jade.core.behaviours.OneShotBehaviour;
  * @version CVS info: $Id: HostUIFrame.java 5373 2004-09-22 13:07:26Z dominic $
  */
 public class HostUIFrame
-    extends JFrame
-{
+        extends JFrame {
     // Constants
     //////////////////////////////////
 
-
     // Static variables
     //////////////////////////////////
-
 
     // Instance variables
     //////////////////////////////////
@@ -104,28 +111,23 @@ public class HostUIFrame
     JLabel jLabel3 = new JLabel();
     JLabel lbl_rumourAvg = new JLabel();
 
-
     protected HostAgent m_owner;
-
 
     // Constructors
     //////////////////////////////////
 
-    public HostUIFrame( HostAgent owner ) {
+    public HostUIFrame(HostAgent owner) {
         try {
             jbInit();
-        }
-        catch(Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         m_owner = owner;
     }
 
-
     // External signature methods
     //////////////////////////////////
-
 
     // Internal implementation methods
     //////////////////////////////////
@@ -219,7 +221,7 @@ public class HostUIFrame
         pnl_main.add(lbl_rumourAvg, null);
         this.getContentPane().add(pnl_numGuests, BorderLayout.NORTH);
         pnl_numGuests.add(box_numGuests, BorderLayout.CENTER);
-        pnl_numGuests.setBorder( BorderFactory.createCompoundBorder( BorderFactory.createEtchedBorder(), BorderFactory.createEmptyBorder( 2, 2, 2, 2 ) ) );
+        pnl_numGuests.setBorder(BorderFactory.createCompoundBorder(BorderFactory.createEtchedBorder(), BorderFactory.createEmptyBorder(2, 2, 2, 2)));
 
         box_numGuests.add(lbl_numGuests, null);
         box_numGuests.add(slide_numGuests, null);
@@ -232,82 +234,75 @@ public class HostUIFrame
         box_buttons.add(component1, null);
         box_buttons.add(btn_Exit, null);
         box_buttons.add(component4, null);
-        lbl_partyState.setForeground( Color.black );
-        lbl_numIntroductions.setForeground( Color.black );
-        lbl_rumourAvg.setForeground( Color.black );
+        lbl_partyState.setForeground(Color.black);
+        lbl_numIntroductions.setForeground(Color.black);
+        lbl_rumourAvg.setForeground(Color.black);
     }
-
 
     /**
      * When the slider for the num guests changes, we update the label.
      */
     void slide_numGuests_stateChanged(ChangeEvent e) {
-        lbl_guestCount.setText( Integer.toString( slide_numGuests.getValue() ) );
+        lbl_guestCount.setText(Integer.toString(slide_numGuests.getValue()));
     }
-
 
     /**
      * When the user clicks on start, notify the host to begin the party.
      */
     void btn_start_actionPerformed(ActionEvent e) {
-        enableControls( true );
+        enableControls(true);
 
         // add a behaviour to the host to start the conversation going
-        m_owner.addBehaviour( new OneShotBehaviour() {
-                                  public void action() {
-                                      ((HostAgent) myAgent).inviteGuests( slide_numGuests.getValue() );
-                                  }
-                              } );
+        m_owner.addBehaviour(new OneShotBehaviour() {
+            public void action() {
+                ((HostAgent) myAgent).inviteGuests(slide_numGuests.getValue());
+            }
+        });
     }
-
 
     /**
      * When the user clicks on stop, tell the host to stop the party.
      */
     void btn_stop_actionPerformed(ActionEvent e) {
-        enableControls( false );
+        enableControls(false);
 
         // add a behaviour to the host to end the party
-        m_owner.addBehaviour( new OneShotBehaviour() {
-                                  public void action() {
-                                      ((HostAgent) myAgent).endParty();
-                                  }
-                              } );
+        m_owner.addBehaviour(new OneShotBehaviour() {
+            public void action() {
+                ((HostAgent) myAgent).endParty();
+            }
+        });
     }
-
 
     /**
      * Maintains the enbabled/disabled state of key controls, depending
      * on whether the sim is running or stopped.
      */
-    void enableControls( boolean starting ) {
-        btn_start.setEnabled( !starting );
-        btn_stop.setEnabled( starting );
-        slide_numGuests.setEnabled( !starting );
-        btn_Exit.setEnabled( !starting );
+    void enableControls(boolean starting) {
+        btn_start.setEnabled(!starting);
+        btn_stop.setEnabled(starting);
+        slide_numGuests.setEnabled(!starting);
+        btn_Exit.setEnabled(!starting);
     }
-
 
     /**
      * When the user clicks the exit button, tell the host to shut down.
      */
     void btn_Exit_actionPerformed(ActionEvent e) {
-        m_owner.addBehaviour( new OneShotBehaviour() {
-                                  public void action() {
-                                      ((HostAgent) myAgent).terminateHost();
-                                  }
-                              } );
+        m_owner.addBehaviour(new OneShotBehaviour() {
+            public void action() {
+                ((HostAgent) myAgent).terminateHost();
+            }
+        });
     }
-
 
     /**
      * The window closing event is the same as clicking exit.
      */
     void this_windowClosing(WindowEvent e) {
         // simulate the user having clicked exit
-        btn_Exit_actionPerformed( null );
+        btn_Exit_actionPerformed(null);
     }
-
 
     //==============================================================================
     // Inner class definitions
