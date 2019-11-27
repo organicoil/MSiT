@@ -1,4 +1,4 @@
-package ua.nure.msit.dvortsov.examples.bookTrading;
+package ua.nure.msit.dvortsov.bookTrading;
 
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
