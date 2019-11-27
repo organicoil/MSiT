@@ -1,4 +1,6 @@
-package ua.nure.msit.dvortsov.bookTrading;
+package ua.nure.msit.dvortsov.bookTrading.ui;
+
+import ua.nure.msit.dvortsov.bookTrading.agent.BookSellerAgent;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,58 +15,65 @@ import java.awt.Toolkit;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 
-/**
- * @author Giovanni Caire - TILAB
- */
-class BookSellerGui extends JFrame {
+public class BookSellerGui extends JFrame {
 
-    private BookSellerAgent myAgent;
-    private JTextField titleField;
-    private JTextField priceField;
+    private BookSellerAgent bookSellerAgent;
 
-    BookSellerGui(BookSellerAgent bookSellerAgent) {
+    public BookSellerGui(BookSellerAgent bookSellerAgent) {
         super(bookSellerAgent.getLocalName());
+        this.bookSellerAgent = bookSellerAgent;
+    }
 
-        myAgent = bookSellerAgent;
+    public void start() {
+        createGuiComponents();
+        showGui();
+    }
 
-        JPanel jPanel = new JPanel();
-        jPanel.setLayout(new GridLayout(2, 2));
-        jPanel.add(new JLabel("Book title:"));
-        titleField = new JTextField(15);
-        jPanel.add(titleField);
-        jPanel.add(new JLabel("Price:"));
-        priceField = new JTextField(15);
-        jPanel.add(priceField);
-        getContentPane().add(jPanel, BorderLayout.CENTER);
+    private void createGuiComponents() {
+        JPanel inputPanel = new JPanel();
+        inputPanel.setLayout(new GridLayout(2, 2));
+
+        inputPanel.add(new JLabel("Book title:"));
+        JTextField titleField = new JTextField(15);
+        inputPanel.add(titleField);
+
+        inputPanel.add(new JLabel("Price:"));
+        JTextField priceField = new JTextField(15);
+        inputPanel.add(priceField);
+
+        getContentPane().add(inputPanel, BorderLayout.CENTER);
+
+        JPanel buttonPanel = new JPanel();
 
         JButton addButton = new JButton("Add");
         addButton.addActionListener(actionEvent -> {
             try {
                 String title = titleField.getText().trim();
                 String price = priceField.getText().trim();
-                myAgent.updateCatalogue(title, Integer.parseInt(price));
+                bookSellerAgent.updateCatalogue(title, Integer.parseInt(price));
                 titleField.setText("");
                 priceField.setText("");
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(BookSellerGui.this, "Invalid values. " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
             }
         });
-        jPanel = new JPanel();
-        jPanel.add(addButton);
-        getContentPane().add(jPanel, BorderLayout.SOUTH);
+        buttonPanel.add(addButton);
 
-        // Make the agent terminate when the user closes
-        // the GUI using the button on the upper right corner
-        addWindowListener(new WindowAdapter() {
-            public void windowClosing(WindowEvent windowEvent) {
-                myAgent.doDelete();
-            }
-        });
+        getContentPane().add(buttonPanel, BorderLayout.SOUTH);
 
-        setResizable(false);
+        addTerminateOnCloseWindowListener();
     }
 
-    public void showGui() {
+    private void addTerminateOnCloseWindowListener() {
+        addWindowListener(new WindowAdapter() {
+            public void windowClosing(WindowEvent windowEvent) {
+                bookSellerAgent.doDelete();
+            }
+        });
+    }
+
+    private void showGui() {
+        setResizable(false);
         pack();
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         int centerX = (int) screenSize.getWidth() / 2;

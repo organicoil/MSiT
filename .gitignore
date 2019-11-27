@@ -8,3 +8,7 @@ target/
 # Logs
 *.log
 *.log.*
+
+# JADE
+APDescription.txt
+MTPs-Main-Container.txt

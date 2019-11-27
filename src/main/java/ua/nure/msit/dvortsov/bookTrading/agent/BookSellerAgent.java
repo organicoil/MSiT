@@ -1,4 +1,4 @@
-package ua.nure.msit.dvortsov.bookTrading;
+package ua.nure.msit.dvortsov.bookTrading.agent;
 
 import jade.core.Agent;
 import jade.core.behaviours.CyclicBehaviour;
@@ -9,10 +9,16 @@ import jade.domain.FIPAAgentManagement.ServiceDescription;
 import jade.domain.FIPAException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import ua.nure.msit.dvortsov.bookTrading.ui.BookSellerGui;
 
 import java.util.Hashtable;
 
 public class BookSellerAgent extends Agent {
+
+    private static final Logger LOG = LoggerFactory.getLogger(BookSellerAgent.class);
+
     // The catalogue of books for sale (maps the title of a book to its price)
     private Hashtable catalogue;
     // The GUI by means of which the user can add books in the catalogue
@@ -25,7 +31,7 @@ public class BookSellerAgent extends Agent {
 
         // Create and show the GUI
         bookSellerGui = new BookSellerGui(this);
-        bookSellerGui.showGui();
+        bookSellerGui.start();
 
         // Register the book-selling service in the yellow pages
         DFAgentDescription dfAgentDescription = new DFAgentDescription();
