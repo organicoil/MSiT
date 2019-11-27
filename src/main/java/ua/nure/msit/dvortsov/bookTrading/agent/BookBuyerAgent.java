@@ -12,6 +12,8 @@ import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import ua.nure.msit.dvortsov.bookTrading.dto.BookBuyerAgentConfig;
+import ua.nure.msit.dvortsov.bookTrading.util.Const;
 
 import java.util.Arrays;
 import java.util.List;
@@ -21,34 +23,35 @@ public class BookBuyerAgent extends Agent {
 
     private static final Logger LOG = LoggerFactory.getLogger(BookBuyerAgent.class);
 
-    private static final int TICKER_PERIOD = 2000;
+    private static final int BUYER_RETRY_TIME_MILLISECONDS = 2000;
 
     @Override
     protected void setup() {
         LOG.debug("Buyer-agent {} is ready.", getAID().getName());
 
-        String targetBookTitle = getBookToBuyTitle();
-        if (targetBookTitle == null) {
-            LOG.debug("No target book title specified");
+        BookBuyerAgentConfig config = getConfig();
+        if (config == null) {
+            LOG.debug("No config specified");
             doDelete();
+        } else {
+            String targetBookTitle = config.getTargetBookTitle();
+            addTickerBehaviour(targetBookTitle);
         }
-
-        addTickerBehaviour(targetBookTitle);
     }
 
-    private String getBookToBuyTitle() {
+    private BookBuyerAgentConfig getConfig() {
         Object[] arguments = getArguments();
         if (arguments == null || arguments.length == 0) {
             return null;
         }
 
-        String targetBookTitle = (String) arguments[0];
-        LOG.debug("Target book is {}", targetBookTitle);
-        return targetBookTitle;
+        BookBuyerAgentConfig config = (BookBuyerAgentConfig) arguments[0];
+        LOG.debug("BookBuyerAgent's config: {}", config);
+        return config;
     }
 
     private void addTickerBehaviour(String targetBookTitle) {
-        addBehaviour(new TickerBehaviour(this, TICKER_PERIOD) {
+        addBehaviour(new TickerBehaviour(this, BUYER_RETRY_TIME_MILLISECONDS) {
             protected void onTick() {
                 LOG.debug("Trying to buy {}", targetBookTitle);
 
@@ -70,7 +73,7 @@ public class BookBuyerAgent extends Agent {
     private DFAgentDescription getTemplate() {
         DFAgentDescription template = new DFAgentDescription();
         ServiceDescription serviceDescription = new ServiceDescription();
-        serviceDescription.setType("book-selling");
+        serviceDescription.setType(Const.BOOK_SELLING_SERVICE_TYPE);
         template.addServices(serviceDescription);
 
         return template;
@@ -81,7 +84,7 @@ public class BookBuyerAgent extends Agent {
         LOG.debug("Buyer-agent {} terminating.", getAID().getName());
     }
 
-    private class RequestPerformer extends Behaviour {
+    private static class RequestPerformer extends Behaviour {
 
         private String targetBookTitle;
         private List<AID> sellerAgents;

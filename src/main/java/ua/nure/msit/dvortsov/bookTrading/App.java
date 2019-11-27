@@ -7,6 +7,7 @@ import jade.wrapper.AgentContainer;
 import jade.wrapper.StaleProxyException;
 import ua.nure.msit.dvortsov.bookTrading.agent.BookBuyerAgent;
 import ua.nure.msit.dvortsov.bookTrading.agent.BookSellerAgent;
+import ua.nure.msit.dvortsov.bookTrading.dto.BookBuyerAgentConfig;
 
 import static jade.core.Runtime.instance;
 
@@ -19,8 +20,9 @@ public class App {
         Profile profile = new ProfileImpl(properties);
         AgentContainer agentContainer = instance().createMainContainer(profile);
 
-        String[] buyerArgs = {"Title"};
+        BookBuyerAgentConfig[] buyerArgs = {new BookBuyerAgentConfig("Title")};
         agentContainer.createNewAgent(BookBuyerAgent.class.getSimpleName(), BookBuyerAgent.class.getName(), buyerArgs).start();
+
         agentContainer.acceptNewAgent(BookSellerAgent.class.getSimpleName(), new BookSellerAgent()).start();
     }
 

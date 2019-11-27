@@ -12,6 +12,7 @@ import jade.lang.acl.MessageTemplate;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import ua.nure.msit.dvortsov.bookTrading.ui.BookSellerGui;
+import ua.nure.msit.dvortsov.bookTrading.util.Const;
 
 import java.util.Hashtable;
 
@@ -37,8 +38,8 @@ public class BookSellerAgent extends Agent {
         DFAgentDescription dfAgentDescription = new DFAgentDescription();
         dfAgentDescription.setName(getAID());
         ServiceDescription serviceDescription = new ServiceDescription();
-        serviceDescription.setType("book-selling");
-        serviceDescription.setName("JADE-book-trading");
+        serviceDescription.setType(Const.BOOK_SELLING_SERVICE_TYPE);
+        serviceDescription.setName(Const.BOOK_SELLING_SERVICE_NAME);
         dfAgentDescription.addServices(serviceDescription);
         try {
             DFService.register(this, dfAgentDescription);
