@@ -52,7 +52,7 @@ public class WumpusWorldAgent extends Agent {
 
     @Override
     protected void setup() {
-        System.out.println("Hello! WampusWorld-agent " + getAID().getName() + " is ready.");
+        System.out.println("WumpusWorldAgent: WampusWorld-agent " + getAID().getName() + " is ready.");
         Speleologists = new HashMap<>();
         generateMap();
         showMap();
@@ -76,7 +76,7 @@ public class WumpusWorldAgent extends Agent {
     private void generateMap() {
         wampusMap = new Room[NUM_OF_ROWS][NUM_OF_COLUMNS];
 
-        wampusMap[0][0] = new Room(START);
+        wampusMap[0][0] = new Room();
         wampusMap[0][1] = new Room(BREEZE);
         wampusMap[0][2] = new Room(PIT);
         wampusMap[0][3] = new Room(BREEZE);
@@ -95,22 +95,15 @@ public class WumpusWorldAgent extends Agent {
         wampusMap[3][1] = new Room();
         wampusMap[3][2] = new Room(BREEZE);
         wampusMap[3][3] = new Room(PIT);
-
-        for (int i = 0; i < wampusMap.length; i++) {
-            for (int j = 0; j < wampusMap[i].length; j++) {
-                if (wampusMap[i][j] == null) {
-                    wampusMap[i][j] = new Room();
-                }
-            }
-        }
     }
 
     private void showMap() {
-        for (int i = 0; i < this.wampusMap.length; i++) {
-            for (int j = 0; j < this.wampusMap[i].length; j++) {
-                System.out.println("POSITION: " + i + ", " + j + "; MARKERS: " + wampusMap[i][j].getEvents());
+        System.out.println("WumpusWorldAgent: MAP:");
+        for (Room[] rooms : this.wampusMap) {
+            for (Room room : rooms) {
+                System.out.print(String.format("%24s", room.getEvents()));
             }
-
+            System.out.println();
         }
     }
 
@@ -201,7 +194,7 @@ public class WumpusWorldAgent extends Agent {
                 String message = msg.getContent();
                 AID current_Speleologist = msg.getSender();
                 Coords speleologistCoords = Speleologists.get(current_Speleologist);
-                System.out.println("World say: Current agent coords: " + speleologistCoords.getRow() + " | " + speleologistCoords.getColumn());
+                System.out.println("WumpusWorldAgent: World say: Current agent coords: " + speleologistCoords.getRow() + " | " + speleologistCoords.getColumn());
                 if (speleologistCoords == null) {
                     Speleologists.put(current_Speleologist, new Coords(0, 0));
                     speleologistCoords = Speleologists.get(current_Speleologist);

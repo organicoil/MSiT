@@ -68,7 +68,7 @@ public class NavigatorAgent extends Agent {
         } catch (FIPAException fe) {
             fe.printStackTrace();
         }
-        System.out.println("Navigator-agent " + getAID().getName() + " terminating.");
+        System.out.println("NavigatorAgent: Navigator-agent " + getAID().getName() + " terminating.");
     }
 
     private class LocationRequestsServer extends CyclicBehaviour {
@@ -89,8 +89,8 @@ public class NavigatorAgent extends Agent {
                 String location = msg.getContent();
                 location = location.substring(1, location.length() - 1);
                 String[] room_info = location.split(", ");
-                System.out.println("ROOM INFO: " + Arrays.toString(room_info));
-                System.out.println("AGENT INFO: " + request_agent_position.getX() + " " + request_agent_position.getY());
+                System.out.println("NavigatorAgent: ROOM INFO: " + Arrays.toString(room_info));
+                System.out.println("NavigatorAgent: AGENT INFO: " + request_agent_position.getX() + " " + request_agent_position.getY());
                 String[] actions = get_actions(request_agent, request_agent_position, room_info);
                 ACLMessage reply = msg.createReply();
 
@@ -104,7 +104,7 @@ public class NavigatorAgent extends Agent {
     }
 
     private String[] get_actions(AID request_agent, Position request_agent_position, String[] room_info) {
-        System.out.println("Agent pos before: " + request_agent_position.getX() + " | " + request_agent_position.getY());
+        System.out.println("NavigatorAgent: Agent pos before: " + request_agent_position.getX() + " | " + request_agent_position.getY());
         int[] actions;
         ImaginaryRoom checking_room = world.getWorldGrid().get(request_agent_position);
         if (checking_room == null) {
@@ -119,7 +119,7 @@ public class NavigatorAgent extends Agent {
             request_agent_position.setY(agentY);
             if (world.getWorldGrid().get(request_agent_position).getExist() != Const.Room.Status.TRUE) {
                 world.getWorldGrid().get(request_agent_position).setExist(Const.Room.Status.TRUE);
-                System.out.println("MARKED THE EXISTENCE");
+                System.out.println("NavigatorAgent: MARKED THE EXISTENCE");
             }
             moveRoom = false;
         } else {
@@ -149,29 +149,29 @@ public class NavigatorAgent extends Agent {
             int candidate_status = -1;
             for (int i = 0; i < nextOkRooms.length; ++i) {
                 Position candidate_room = nextOkRooms[i];
-                System.out.println("CANDIDATE CHECKING: " + candidate_room.getX() + " " + candidate_room.getY());
-                System.out.println("AGENT CHECKING: " + request_agent_position.getX() + " " + request_agent_position.getY());
+                System.out.println("NavigatorAgent: CANDIDATE CHECKING: " + candidate_room.getX() + " " + candidate_room.getY());
+                System.out.println("NavigatorAgent: AGENT CHECKING: " + request_agent_position.getX() + " " + request_agent_position.getY());
                 if (candidate_room.getX() > request_agent_position.getX()) {
                     best_candidate = i;
-                    System.out.println("1");
+                    System.out.println("NavigatorAgent: 1");
                     break;
                 } else if (candidate_room.getY() > request_agent_position.getY()) {
                     if (candidate_status < 3) {
-                        System.out.println("2");
+                        System.out.println("NavigatorAgent: 2");
                         candidate_status = 3;
                     } else {
                         continue;
                     }
                 } else if (candidate_room.getX() < request_agent_position.getX()) { // влево
                     if (candidate_status < 2) {
-                        System.out.println("3");
+                        System.out.println("NavigatorAgent: 3");
                         candidate_status = 2;
                     } else {
                         continue;
                     }
                 } else { // вниз
                     if (candidate_status < 1) {
-                        System.out.println("4");
+                        System.out.println("NavigatorAgent: 4");
                         candidate_status = 1;
                     } else {
                         continue;
@@ -179,10 +179,10 @@ public class NavigatorAgent extends Agent {
                 }
                 best_candidate = i;
             }
-            System.out.println("OK ROOMS COUNT IS: " + nextOkRooms.length);
-            System.out.println("ADVICE POSITION IS: " + nextOkRooms[best_candidate].getX() + " | " + nextOkRooms[best_candidate].getY());
+            System.out.println("NavigatorAgent: OK ROOMS COUNT IS: " + nextOkRooms.length);
+            System.out.println("NavigatorAgent: ADVICE POSITION IS: " + nextOkRooms[best_candidate].getX() + " | " + nextOkRooms[best_candidate].getY());
             actions = getNextRoomAction(request_agent_position, nextOkRooms[best_candidate], SpeleologistAgent.MOVE);
-            System.out.println("ADVICE ACTIONS IS: " + Arrays.toString(actions));
+            System.out.println("NavigatorAgent: ADVICE ACTIONS IS: " + Arrays.toString(actions));
         }
 
         String[] language_actions = new String[actions.length];

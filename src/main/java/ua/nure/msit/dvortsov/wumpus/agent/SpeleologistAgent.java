@@ -182,7 +182,7 @@ public class SpeleologistAgent extends Agent {
                             } else if (instructions.length == 2 && Objects.equals(instructions[1], actionCodes.get(MOVE))) {
                                 sendMoveMessage(instructions[0]);
                             } else {
-                                System.out.println("ERROR ACTIONS");
+                                System.out.println("SpeleologistAgent: ERROR ACTIONS");
                             }
                             ++step;
                         }
