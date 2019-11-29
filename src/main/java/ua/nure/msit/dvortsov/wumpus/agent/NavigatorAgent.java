@@ -134,7 +134,6 @@ public class NavigatorAgent extends Agent {
             actions = getNextRoomAction(request_agent_position, wampusPosition, SpeleologistAgent.SHOOT_ARROW);
         } else {
             Position[] nextOkRooms = getOkNeighbors(request_agent, request_agent_position);
-            // TODO: Нужно еще отсечь тех, у кого нет пути к золоту
             int best_candidate = -1;
             int candidate_status = -1;
             for (int i = 0; i < nextOkRooms.length; ++i) {
@@ -207,8 +206,7 @@ public class NavigatorAgent extends Agent {
         Position[] okNeighbors = getNeighborsPosition(request_agent_position);
         ArrayList<Position> okPositions = new ArrayList<>();
         for (Position position : okNeighbors) {
-            this.world.getWorldGrid().putIfAbsent(position, new ImaginaryRoom()); // если комнаты
-            // не существует - добавляем новую комнату на карте
+            this.world.getWorldGrid().putIfAbsent(position, new ImaginaryRoom());
             if ((this.world.getWorldGrid().get(position).getOk() == Const.Room.Status.TRUE
                     && this.world.getWorldGrid().get(position).getNoWay() != Const.Room.Status.TRUE
                     && this.world.getWorldGrid().get(position).getExist() != Const.Room.Status.FALSE
@@ -251,8 +249,7 @@ public class NavigatorAgent extends Agent {
             bottomRoom = new ImaginaryRoom();
             world.getWorldGrid().put(rightNeighbor, bottomRoom);
         }
-        ImaginaryRoom[] rooms = new ImaginaryRoom[]{rightRoom, upRoom, leftRoom, bottomRoom};
-        return rooms;
+        return new ImaginaryRoom[]{rightRoom, upRoom, leftRoom, bottomRoom};
     }
 
     private Position[] getNeighborsPosition(Position request_agent_position) {

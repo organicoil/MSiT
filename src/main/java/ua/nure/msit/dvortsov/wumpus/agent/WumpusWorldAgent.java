@@ -22,7 +22,6 @@ public class WumpusWorldAgent extends Agent {
     private static final String SERVICE_DESCRIPTION = "WUMPUS-WORLD";
 
     private static int START = -1;
-    //    private static int EMPTY = 0;
     private static int WAMPUS = 1;
     private static int PIT = 2;
     private static int BREEZE = 3;
@@ -126,7 +125,6 @@ public class WumpusWorldAgent extends Agent {
                     reply.setContent(wampusMap[0][0].getEvents().toString());
                     myAgent.send(reply);
                 }
-//
             } else {
                 block();
             }
@@ -231,7 +229,6 @@ public class WumpusWorldAgent extends Agent {
             MessageTemplate mt = MessageTemplate.MatchPerformative(SpeleologistAgent.TAKE_GOLD);
             ACLMessage msg = myAgent.receive(mt);
             if (msg != null) {
-                String message = msg.getContent();
                 AID current_Speleologist = msg.getSender();
                 Coords Speleologist_coords = Speleologists.get(current_Speleologist);
                 if (Speleologist_coords == null) {
