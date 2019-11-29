@@ -23,18 +23,9 @@ public class NavigatorAgent extends Agent {
 
     private static final String SERVICE_DESCRIPTION = "NAVIGATOR_AGENT";
 
-    private static int ROOM_EXIST = 1;
-    private static int ROOM_STENCH = 2;
-    private static int ROOM_BREEZE = 3;
-    private static int ROOM_PIT = 4;
-    private static int ROOM_WUMPUS = 5;
-    private static int ROOM_OK = 6;
-    private static int ROOM_GOLD = 7;
-
     private Hashtable<AID, Position> agents_coords;
     private Hashtable<AID, LinkedList<int[]>> agentsWayStory;
 
-    private boolean moveRoom = false;
     private int agentX;
     private int agentY;
 
@@ -121,7 +112,6 @@ public class NavigatorAgent extends Agent {
                 world.getWorldGrid().get(request_agent_position).setExist(Const.Room.Status.TRUE);
                 System.out.println("NavigatorAgent: MARKED THE EXISTENCE");
             }
-            moveRoom = false;
         } else {
             Position helpPosition = new Position(agentX, agentY);
             world.getWorldGrid().get(helpPosition).setExist(Const.Room.Status.FALSE);
@@ -209,7 +199,6 @@ public class NavigatorAgent extends Agent {
             agentX -= 1;
             look = SpeleologistAgent.LOOK_LEFT;
         }
-        moveRoom = true;
 
         return new int[]{look, action};
     }

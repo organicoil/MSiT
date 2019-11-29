@@ -16,15 +16,20 @@ import java.util.Objects;
 
 public class SpeleologistAgent extends Agent {
 
-    private static int WORLD_SEARCH_PAUSE = 2000;
+    public static final int LOOK_RIGHT = 0;
+    public static final int LOOK_LEFT = 1;
+    public static final int LOOK_UP = 2;
+    public static final int LOOK_DOWN = 3;
+    public static final int MOVE = 4;
+    public static final int SHOOT_ARROW = 5;
+    public static final int TAKE_GOLD = 6;
 
-    public static int LOOK_RIGHT = 0;
-    public static int LOOK_LEFT = 1;
-    public static int LOOK_UP = 2;
-    public static int LOOK_DOWN = 3;
-    public static int MOVE = 4;
-    public static int SHOOT_ARROW = 5;
-    public static int TAKE_GOLD = 6;
+    public static final String GO_INSIDE = "go_inside";
+    public static final String WUMPUS_WORLD_TYPE = "wumpus-world";
+    public static final String NAVIGATOR_AGENT_TYPE = "navigator-agent";
+
+    private static final String WORLD_DIGGER_CONVERSATION_ID = "digger-world";
+    private static final String NAVIGATOR_DIGGER_CONVERSATION_ID = "digger-navigator";
 
     public static Map<Integer, String> actionCodes = new HashMap<Integer, String>() {{
         put(LOOK_RIGHT, "right");
@@ -36,14 +41,6 @@ public class SpeleologistAgent extends Agent {
         put(TAKE_GOLD, "take");
     }};
 
-    public static String GO_INSIDE = "go_inside";
-    public static String WUMPUS_WORLD_TYPE = "wumpus-world";
-    public static String NAVIGATOR_AGENT_TYPE = "navigator-agent";
-
-    public static String WORLD_DIGGER_CONVERSATION_ID = "digger-world";
-    public static String NAVIGATOR_DIGGER_CONVERSATION_ID = "digger-navigator";
-
-    private int arrowCount = 1;
     private AID wumpusWorld;
     private AID navigationAgent;
     private String currentWorldState = "";
@@ -65,7 +62,7 @@ public class SpeleologistAgent extends Agent {
                 template.addServices(sd);
                 try {
                     DFAgentDescription[] result = DFService.search(myAgent, template);
-                    if (result != null && result.length > 0) {
+                    if (result.length > 0) {
                         wumpusWorld = result[0].getName();
                         myAgent.addBehaviour(new WumpusWorldPerformer());
                         ++step;
@@ -111,8 +108,7 @@ public class SpeleologistAgent extends Agent {
                     ACLMessage reply = myAgent.receive(mt);
                     if (reply != null) {
                         if (reply.getPerformative() == ACLMessage.CONFIRM) {
-                            String answer = reply.getContent();
-                            currentWorldState = answer;
+                            currentWorldState = reply.getContent();
                             myAgent.addBehaviour(new NavigatorAgentPerformer());
                             step = 2;
                         }
@@ -143,7 +139,7 @@ public class SpeleologistAgent extends Agent {
                     template.addServices(sd);
                     try {
                         DFAgentDescription[] result = DFService.search(myAgent, template);
-                        if (result != null && result.length > 0) {
+                        if (result.length > 0) {
                             navigationAgent = result[0].getName();
                             ++step;
                         } else {

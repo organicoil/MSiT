@@ -10,7 +10,6 @@ public class ImaginaryWumpusWorld {
     private Hashtable<Position, ImaginaryRoom> worldGrid;
     private boolean isWumpusAlive;
     private int wumpusRoomCount;
-    private Position wumpusCoords;
 
     public ImaginaryWumpusWorld(){
         worldGrid = new Hashtable<>();
@@ -32,8 +31,8 @@ public class ImaginaryWumpusWorld {
         }
         xWumpusCoord /= wumpusRoomCount;
         yWumpusCoord /= wumpusRoomCount;
-        this.wumpusCoords = new Position(xWumpusCoord, yWumpusCoord);
-        return this.wumpusCoords;
+
+        return new Position(xWumpusCoord, yWumpusCoord);
     }
 
     public Hashtable<Position, ImaginaryRoom> getWorldGrid() {

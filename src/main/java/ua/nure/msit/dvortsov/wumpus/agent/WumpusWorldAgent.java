@@ -19,7 +19,7 @@ import java.util.Objects;
 
 public class WumpusWorldAgent extends Agent {
 
-    public static String SERVICE_DESCRIPTION = "WUMPUS-WORLD";
+    private static final String SERVICE_DESCRIPTION = "WUMPUS-WORLD";
 
     private static int START = -1;
     //    private static int EMPTY = 0;
